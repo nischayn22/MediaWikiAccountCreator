@@ -6,6 +6,8 @@ $settings['wikiPassword'] = "Password"; // Password
 
 $settings['csv_file'] = 'usernames.csv';
 
+$settings['mail_user'] = false; // Set to true to send emails to users after account creation.
+
 $settings['smtp_host'] = '';
 $settings['smtp_username'] = '';
 $settings['smtp_password'] = '';

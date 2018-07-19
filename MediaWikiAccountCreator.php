@@ -36,36 +36,38 @@ if (($handle = fopen(__DIR__ . "/" . $settings['csv_file'], "r")) !== FALSE) {
 			echo "Created account for $name\n";
 		}
 
-		$mail = new PHPMailer(true);
-		try {
-			$mail->isSMTP();
-			$mail->Host = $settings['smtp_host'];
-			$mail->SMTPAuth = true;
-			$mail->Username = $settings['smtp_username'];
-			$mail->Password = $settings['smtp_password'];
-			$mail->SMTPSecure = 'tls';
-			$mail->Port = 587;
+		if ( $settings['mail_user'] ) {
+			$mail = new PHPMailer(true);
+			try {
+				$mail->isSMTP();
+				$mail->Host = $settings['smtp_host'];
+				$mail->SMTPAuth = true;
+				$mail->Username = $settings['smtp_username'];
+				$mail->Password = $settings['smtp_password'];
+				$mail->SMTPSecure = 'tls';
+				$mail->Port = 587;
 
-			//Recipients
-			$mail->setFrom( $settings['from'] );
-			$mail->addAddress( $email );
-			foreach( $settings['cc'] as $cc ) {
-				$mail->addCC( $cc );
+				//Recipients
+				$mail->setFrom( $settings['from'] );
+				$mail->addAddress( $email );
+				foreach( $settings['cc'] as $cc ) {
+					$mail->addCC( $cc );
+				}
+
+				//Content
+				$mail->isHTML(true);
+				$mail->Subject = $settings['subject'];
+
+				$body = $settings['body'];
+				$body = str_replace( "{username}", $name, $body );
+				$body = str_replace( "{password}", $password, $body );
+
+				$mail->Body = $body;
+
+				$mail->send();
+			} catch (Exception $e) {
+				echo "Could not send mail to $name\n";
 			}
-
-			//Content
-			$mail->isHTML(true);
-			$mail->Subject = $settings['subject'];
-
-			$body = $settings['body'];
-			$body = str_replace( "{username}", $name, $body );
-			$body = str_replace( "{password}", $password, $body );
-
-			$mail->Body = $body;
-
-			$mail->send();
-		} catch (Exception $e) {
-			echo "Could not send mail to $name\n";
 		}
 	}
 }
