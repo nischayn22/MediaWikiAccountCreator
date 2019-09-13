@@ -30,7 +30,7 @@ if (($handle = fopen(__DIR__ . "/" . $settings['csv_file'], "r")) !== FALSE) {
 		$password = $generator->generateString( 8 );
 
 		if ( !$wikiApi->createAccount( $name, $password, $email, $realname ) ) {
-			echo "Error: ". $wikiApi->getLastError() ." \nCould not create account for $name\n";
+			echo "Could not create account for $name Error: ". $wikiApi->getLastError() ."\n";
 			continue;
 		} else {
 			echo "Created account for $name\n";
